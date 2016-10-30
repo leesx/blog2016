@@ -1,6 +1,7 @@
 extends ./../layout
 
 block content
+    script(src="/assets/js/myapp.js")
     div(class="row")
         div(class="add-article")
         form.form-horizontal
@@ -11,18 +12,18 @@ block content
               // Text input
               label.control-label(for='input01') 标题
               .controls
-                input.input-xlarge(type='text', placeholder='请输入标题')
+                input.input-xlarge#title(type='text', placeholder='请输入标题')
                 p.help-block 不能超过20个字
             .control-group
               // Text input
               label.control-label(for='input01') 作者名称
               .controls
-                input.input-xlarge(type='text', placeholder='')
+                input.input-xlarge#author(type='text', placeholder='')
                 p.help-block
             .control-group
               label.control-label 文章类型
               // Multiple Checkboxes
-              .controls
+              .controls#article-type
                 // Inline Checkboxes
                 label.checkbox.inline
                   input(type='checkbox', value='经济')
@@ -47,7 +48,7 @@ block content
               label.control-label 文章内容
               .controls
                 .textarea
-                  textarea(type='')  
+                  textarea#content(type='',style="width:500px;height:200px;")
             .control-group
               label.control-label 上传缩略图
               // File Upload
@@ -57,6 +58,4 @@ block content
               label.control-label
               // Button
               .controls
-                button.btn.btn-success 提交文章
-
-        
+                button.btn.btn-success#submit 提交文章

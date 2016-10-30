@@ -11,8 +11,9 @@ var routes = require('./routes/index');
 var memberIndex = require('./routes/member/index');
 
 var articleIndex = require('./routes/article/index');
+var articleAdd = require('./routes/article/add');
 var articleList = require('./routes/article/list');
-
+var articleDetail = require('./routes/article/detail');
 var commentIndex = require('./routes/comment/index');
 
 
@@ -40,6 +41,11 @@ app.use('/', routes);
 app.use('/member/index', memberIndex);
 app.use('/article/index', articleIndex);
 app.use('/article/list', articleList);
+app.use('/article/detail', articleDetail);
+
+app.use('/article/add', articleAdd);
+
+
 app.use('/comment/index', commentIndex);
 
 
