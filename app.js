@@ -5,18 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var db = require('./common/db')
-
-var routes = require('./routes/index');
-var memberIndex = require('./routes/member/index');
-
-var articleIndex = require('./routes/article/index');
-var articleAdd = require('./routes/article/add');
-var articleList = require('./routes/article/list');
-var articleDetail = require('./routes/article/detail');
-var commentIndex = require('./routes/comment/index');
-
-
 
 var app = express();
 
@@ -32,21 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-db.collection('users').find({}).toArray(function(err, result) {
-  if (err) throw err;
-  console.log('成功！！！！',result);
-});
 
-app.use('/', routes);
-app.use('/member/index', memberIndex);
-app.use('/article/index', articleIndex);
-app.use('/article/list', articleList);
-app.use('/article/detail', articleDetail);
-
-app.use('/article/add', articleAdd);
-
-
-app.use('/comment/index', commentIndex);
+require('./config/router')(app)
 
 
 // catch 404 and forward to error handler

@@ -1,16 +1,13 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var router = express.Router();
-var db = require('./../../common/db')
+var db = require('./../common/db')
 
-/* 文章列表 */
-router.get('/', function(req, res, next) {
-
+exports.index = function(req, res, next) {
     db.collection('articles').find({}).toArray(function(err, result) {
       if (err) throw err;
       console.log('-----',result);
-      res.render('article/list', { news_lists: result });
+      res.render('index', { news_lists: result });
     });
 
-});
-
-module.exports = router;
+}
