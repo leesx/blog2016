@@ -14,15 +14,16 @@ module.exports = function(app){
   //
   //   next()
   // })
-  app.use('/', AppIndex.index);
+  // 路由指向 / 不能使用 use
+  app.get('/', AppIndex.index);
 
-  app.use('/member/index', Members.index);
+  app.get('/member/index', Members.index);
 
-  app.use('/article/index', Articles.index);
-  app.use('/article/list', Articles.list);
-  app.use('/article/detail', Articles.detail);
-  app.use('/article/add', Articles.add);
+  app.get('/article/index', Articles.index);
+  app.get('/article/list', Articles.list);
+  app.get('/article/detail', Articles.detail);
+  app.post('/article/add', Articles.add);
 
 
-  app.use('/comment/index', Comments.index);
+  app.get('/comment/index', Comments.index);
 }
