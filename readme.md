@@ -1,5 +1,5 @@
 ### 说明
 
-. npm install
-. npm install forever -g
-> 启动项目  npm run debug
+1. npm install
+2. npm install forever -g
+> 启动项目  ==npm run debug==
