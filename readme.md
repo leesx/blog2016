@@ -1,5 +1,5 @@
 ### 说明
 
--- npm install
--- npm install forever -g
--- forever -o out.log -w ./bin/www
+. npm install
+. npm install forever -g
+> 启动项目  npm run debug
