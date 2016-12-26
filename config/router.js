@@ -23,6 +23,7 @@ module.exports = function(app){
   app.get('/article/list', Articles.list);
   app.get('/article/detail', Articles.detail);
   app.post('/article/add', Articles.add);
+  app.post('/article/upload', Articles.upload);
 
 
   app.get('/comment/index', Comments.index);

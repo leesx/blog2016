@@ -1,6 +1,8 @@
 var express = require('express');
+var fs = require('fs');
 var mongoose = require('mongoose');
 var router = express.Router();
+var formidable = require('formidable');
 var db = require('./../common/db')
 
 exports.index = function(req, res, next) {
@@ -28,7 +30,7 @@ exports.detail = function(req, res, next) {
 }
 
 exports.add = function(req, res, next) {
-    console.log('================',req.body)
+    console.log('================',req)
     var params = JSON.parse(req.body.params)
     console.log(params)
     db.collection('articles').insert(params,function(err, result) {
@@ -36,4 +38,26 @@ exports.add = function(req, res, next) {
       console.log('-----',result);
       res.send({ rs:'ok' });
     });
+}
+
+exports.upload = function(req, res, next) {
+    console.log('上传================',req)
+    var form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+        console.log('==========',fields, files)
+        // 从临时目录读取文件的内容
+        var fileContent = fs.readFileSync(files.myfile.path)
+
+        //把读取的内容写到当前文件夹下,文件名叫做 files.myfile.name
+        fs.writeFileSync('./public/upload/' + Date.now() + files.myfile.name, fileContent)
+
+        //写入响应中
+        // res.write(files.myfile.name);
+        //
+        // filename = files.myfile.name;
+
+        res.send('/upload/' + files.myfile.name);
+    })
+
 }

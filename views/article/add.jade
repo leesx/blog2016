@@ -53,7 +53,9 @@ block content
               label.control-label 上传缩略图
               // File Upload
               .controls
-                input#fileInput.input-file(type='file')
+                input#fileInput.input-file(type='file',name="myfile",multiple)
+                div 
+                  img#uploadImg
             .control-group
               label.control-label
               // Button
