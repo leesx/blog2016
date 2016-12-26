@@ -50,14 +50,15 @@ exports.upload = function(req, res, next) {
         var fileContent = fs.readFileSync(files.myfile.path)
 
         //把读取的内容写到当前文件夹下,文件名叫做 files.myfile.name
-        fs.writeFileSync('./public/upload/' + Date.now() + files.myfile.name, fileContent)
+        var filename = Date.now() + files.myfile.name
+        fs.writeFileSync('./public/upload/' + filename, fileContent)
 
         //写入响应中
         // res.write(files.myfile.name);
         //
         // filename = files.myfile.name;
 
-        res.send('/upload/' + files.myfile.name);
+        res.send('/upload/' + filename);
     })
 
 }

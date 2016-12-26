@@ -1,10 +1,27 @@
 extends ./../layout
 
 block content
-    div(class="row")
-        ul(class="list-group")
-        each item, i in news_lists
-            li(class="list-group-item")
-                span #{i+1}
-                span(class="time pull-right") #{item.time}
-                a(href="/article/detail?id=#{item._id}") #{item.title}
+    .container
+    .row
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th 标题
+            th 时间
+            th 查看
+            th 修改
+            th 删除
+        tbody
+          each item in news_lists
+            tr(class="item-id-#{item._id}")
+              td
+                div.media
+                  a.pull-left(href="#")
+                    img(src="#{item.img}",width="50px",alt="")
+                  div.pull-left
+                    p.media-heading #{item.title}
+              td #{item.time}
+              td: a(target="_blank", href="/article/detail?id=#{item._id}") 查看
+              td: a(target="_blank", href="../admin/update/#{item._id}") 修改
+              td
+                button.btn.btn-danger.del(type="button", data-id="#{item._id}") 删除

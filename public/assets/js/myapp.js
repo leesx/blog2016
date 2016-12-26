@@ -1,7 +1,7 @@
 $(function(){
 
 
-
+  var uploadImgName = ''
   $('#fileInput').on('change',function(){
      var oFormData = new FormData()
      oFormData.append('myfile',this.files[0])
@@ -9,21 +9,22 @@ $(function(){
 
     var oFormData = new FormData()
 
-            console.log(this.files[0])
+    console.log(this.files[0])
 
-            oFormData.append('myfile',this.files[0])
+    oFormData.append('myfile',this.files[0])
 
-            var xhr = new XMLHttpRequest()
-            xhr.open('post','/article/upload',true)
-            xhr.onload = function(){
-              if(this.status === 200){
+    var xhr = new XMLHttpRequest()
+    xhr.open('post','/article/upload',true)
+    xhr.onload = function(){
+      if(this.status === 200){
 
-                    var data = xhr.responseText
-                    //console.log(data.imgUrl)
-                    $('#uploadImg').attr('src',data)
-                }
-            }
-            xhr.send(oFormData)
+            var data = xhr.responseText
+            //console.log(data.imgUrl)
+            uploadImgName = data;
+            $('#uploadImg').attr('src',data).width(100)
+        }
+    }
+    xhr.send(oFormData)
 
     // $.ajax({
     //         url: '/article/upload',
@@ -59,7 +60,7 @@ $(function(){
         author:author,
         type:3,
         content:content,
-        img:''
+        img:uploadImgName,
       })
     },function(data){
         if(data.rs == 'ok'){
