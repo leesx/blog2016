@@ -25,17 +25,46 @@ exports.detail = function(req, res, next) {
     db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, result) {
       if (err) throw err;
       console.log('-----','详情',result);
+      
       res.render('article/detail', { detail: result });
+
+    });
+
+}
+
+exports.update = function(req, res, next) {
+    var id = req.query.id
+
+    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, result) {
+      if (err) throw err;
+      res.render('article/update', { detail: result });
+    });
+}
+
+exports.update2 = function(req, res, next) {
+
+    // POST 请求在req.body中取值
+    //GET 请求在req.params中取值
+    var params = JSON.parse(req.body.params)
+    console.log(params)
+    db.collection('articles').update({_id:mongoose.Types.ObjectId(params.id)},params.params,function(err, result) {
+      if (err) throw err;
+      console.log('-----',result);
+      //注意 最后返回的结果 是res.send()方法
+      res.send({ rs:'ok' });
     });
 }
 
 exports.add = function(req, res, next) {
     console.log('================',req)
+    // POST 请求在req.body中取值
+    //GET 请求在req.params中取值
     var params = JSON.parse(req.body.params)
     console.log(params)
     db.collection('articles').insert(params,function(err, result) {
       if (err) throw err;
       console.log('-----',result);
+      //注意 最后返回的结果 是res.send()方法
       res.send({ rs:'ok' });
     });
 }
@@ -61,4 +90,14 @@ exports.upload = function(req, res, next) {
         res.send('/upload/' + filename);
     })
 
+}
+
+exports.remove = function(req,res,next){
+  var id = req.body.id
+  console.log(req.body.id)
+  db.collection('articles').remove({_id:mongoose.Types.ObjectId(id)},function(err, result) {
+    if (err) throw err;
+    console.log('-----','删除',result);
+    res.send({ rs:'ok' });
+  });
 }

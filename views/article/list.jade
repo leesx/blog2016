@@ -3,7 +3,7 @@ extends ./../layout
 block content
     .container
     .row
-      table.table.table-hover.table-bordered
+      table#articles-list.table.table-hover.table-bordered
         thead
           tr
             th 标题
@@ -21,7 +21,7 @@ block content
                   div.pull-left
                     p.media-heading #{item.title}
               td #{item.time}
-              td: a(target="_blank", href="/article/detail?id=#{item._id}") 查看
-              td: a(target="_blank", href="../admin/update/#{item._id}") 修改
+              td: a(href="/article/detail?id=#{item._id}") 查看
+              td: a(href="/article/update?id=#{item._id}") 修改
               td
                 button.btn.btn-danger.del(type="button", data-id="#{item._id}") 删除

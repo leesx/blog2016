@@ -5,5 +5,28 @@ block content
         p: a(href="/article/list") 返回列表>>
         div.detail-mian
           h2 #{detail.title}
-          img(src="#{detail.img}",width="300px") 
+          img(src="#{detail.img}",width="300px")
           div.detail #{detail.content}
+          input#article-id(type='hidden',value='#{detail._id}')
+        div.comments
+        form.form-horizontal#comments
+            fieldset
+            #legend
+              legend ==评论==
+            .control-group
+              // Text input
+              label.control-label(for='input01') 昵称
+              .controls
+                input.input-xlarge#cm-title(type='text', placeholder='请输入昵称')
+                p.help-block 不能超过20个字
+            .control-group
+              // Textarea
+              label.control-label 评论内容
+              .controls
+                .textarea
+                  textarea#cm-content(type='',style="width:500px;height:200px;")
+            .control-group
+              label.control-label
+              // Button
+              .controls
+                button.btn.btn-success#comments-submit 提交评论
