@@ -1,3 +1,26 @@
 .main{
     margin-top:60px;
 }
+ul,li{
+  list-style: none;
+}
+.detail-mian{
+  padding:10px;
+}
+.detail-mian .title{
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.detail-mian .content{
+  line-height: 25px;
+}
+.comments {
+  padding:10px;
+  border:1px solid #ccc;
+  font-size: 12px;
+}
+
+.media .s-img{
+  margin-right:10px;
+}

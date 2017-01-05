@@ -21,10 +21,14 @@ module.exports = function(app){
 
   app.get('/article/index', Articles.index);
   app.get('/article/list', Articles.list);
-  app.get('/article/detail', Articles.detail);
+  app.get('/article/detail', Articles.detail,Comments.list);
   app.post('/article/add', Articles.add);
   app.post('/article/upload', Articles.upload);
+  app.post('/article/remove', Articles.remove);
+  app.get('/article/update', Articles.update);
+  app.post('/article/update2', Articles.update2);
 
 
   app.get('/comment/index', Comments.index);
+  app.post('/comment/add', Comments.add);
 }
