@@ -1,4 +1,5 @@
 var AppIndex = require('./../controllers/index');
+var User = require('./../controllers/user');
 
 
 var Members = require('./../controllers/members');
@@ -17,7 +18,17 @@ module.exports = function(app){
   // 路由指向 / 不能使用 use
   app.get('/', AppIndex.index);
 
+
   app.get('/member/index', Members.index);
+
+  //注册
+  app.get('/user/reg',User.reg)
+  app.post('/api/reg',User.regApi)
+
+  //登录
+  app.get('/user/login',User.login)
+  app.post('/api/login',User.loginApi)
+
 
   app.get('/article/index', Articles.index);
   app.get('/article/list', Articles.list);

@@ -139,4 +139,54 @@ $(function(){
       }
     })
   })
+
+  //注册
+  $('#reg-box').on('submit',function(){
+    var $regbox = $('#reg-box')
+    var username = $regbox.find('.username').val().trim()
+    var password = $regbox.find('.password').val().trim()
+    var repassword = $regbox.find('.repassword').val().trim()
+
+    if(!username || !password || !repassword) return false;
+    if(password !== repassword){
+      alert('输入的密码不同,请确认！')
+      return false;
+    }
+    $.post('/api/reg',{
+      username:username,
+      password:password
+    },function(data){
+      if(data.rs){
+        alert('注册成功')
+        location.href = '/user/login'
+      }else{
+        alert(data.error)
+      }
+    },'json')
+    return false;
+
+  })
+
+  //登录
+  $('#login-box').on('submit',function(){
+    var $regbox = $('#login-box')
+    var username = $regbox.find('.username').val().trim()
+    var password = $regbox.find('.password').val().trim()
+
+    if(!username || !password ) return false;
+
+    $.post('/api/login',{
+      username:username,
+      password:password
+    },function(data){
+      if(data.rs){
+        alert('登录成功')
+        location.href = '/'
+      }else{
+        alert(data.error)
+      }
+    },'json')
+    return false;
+
+  })
 })

@@ -1,0 +1,9 @@
+extends ./../layout
+
+block content
+  div(class="row")
+    form#login-box.form-signin
+      h2.form-signin-heading 欢迎登录 #{name}
+      input.input-block-level.username(type="text",placeholder="请输入用户名")
+      input.input-block-level.password(type="password",placeholder="请输入密码")
+      button.btn.btn-large.btn-primary(type="submit") 登录

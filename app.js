@@ -2,8 +2,11 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var session = require('express-session');
+var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var sessionConfig = require('./config/session');
 
 
 var app = express();
@@ -20,6 +23,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// session 中间件
+app.use(session({
+  name: sessionConfig.key,// 设置 cookie 中保存 session id 的字段名称
+  secret: sessionConfig.secret,// 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
+  cookie: {
+    maxAge: sessionConfig.maxAge// 过期时间，过期后 cookie 中的 session id 自动删除
+  }
+}));
+// flash 中间价，用来显示通知
+app.use(flash());
 
 require('./config/router')(app)
 

@@ -19,7 +19,6 @@ exports.list = function(req, res, next) {
 }
 
 exports.detail = function(req, res, next) {
-  console.log("++++++++++++++",req.query)
     var id = req.query.id
     var data = {}
     db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, result) {
@@ -32,7 +31,7 @@ exports.detail = function(req, res, next) {
 
     db.collection('comments').find({arId:id}).toArray(function(err, result) {
       if (err) throw err;
-      
+
       data.comments = result
       console.log('评论列表',result);
       //注意 最后返回的结果 是res.send()方法
@@ -65,14 +64,14 @@ exports.update2 = function(req, res, next) {
 }
 
 exports.add = function(req, res, next) {
-    console.log('================',req)
+
     // POST 请求在req.body中取值
     //GET 请求在req.params中取值
     var params = JSON.parse(req.body.params)
     console.log(params)
     db.collection('articles').insert(params,function(err, result) {
       if (err) throw err;
-      console.log('-----',result);
+      //console.log('-----',result);
       //注意 最后返回的结果 是res.send()方法
       res.send({ rs:'ok' });
     });

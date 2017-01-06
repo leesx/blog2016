@@ -1,0 +1,10 @@
+extends ./../layout
+
+block content
+  div(class="row")
+    form#reg-box.form-signin
+      h2.form-signin-heading 欢迎注册 #{name}
+      input.input-block-level.username(type="text",placeholder="请输入用户名")
+      input.input-block-level.password(type="password",placeholder="请输入密码")
+      input.input-block-level.repassword(type="password",placeholder="请再次输入密码")
+      button.btn.btn-large.btn-primary(type="submit") 注册
