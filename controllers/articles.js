@@ -2,41 +2,127 @@ var express = require('express');
 var fs = require('fs');
 var mongoose = require('mongoose');
 var router = express.Router();
+var objectIdToTimestamp = require('objectid-to-timestamp');
+var moment = require('moment');
+moment.locale('zh-CN');
+//objectIdToTimestamp('563229dd1ee6030100644cbe');// 1446128093391
 var formidable = require('formidable');
 var db = require('./../common/db')
 
+exports.search = function(req, res, next){
+  var keyword = req.query.keyword
+
+  db.collection('articles').find({$or:[{title:{$regex:keyword}},{content:{$regex:keyword}}]}).toArray(function(err, result) {
+
+      var replaceresult= result.map(function(item){
+        var regex = new RegExp(keyword,'ig')
+        var reTitle = item.title.replace(regex,'<span class="search-tag">'+keyword+'</span>')
+        var reContent = item.content.replace(regex,'<span class="search-tag">'+keyword+'</span>')
+        console.log(reTitle)
+        return {
+          _id:item._id,
+          title:reTitle,
+          content:reContent,
+          img:item.img
+        }
+      })
+
+      res.render('article/search', { articles: replaceresult });
+  })
+}
 exports.index = function(req, res, next) {
+  var category = req.query.category
+  console.log('============',category)
+  db.collection('articles').find({category:category}).toArray(function(err, result) {
+    if (err) throw err;
+    var resultArr = []
+    for(var i=0;i<result.length;i++){
+      var obj = {}
+      var timestamp = objectIdToTimestamp(result[i]._id)
+      var time = null
+
+      console.log(Date.now() - timestamp)
+      if((Date.now() - timestamp) < 1*60*60*1000){
+        //小于1小时
+        time = moment(timestamp).startOf('hour').fromNow()
+      }else if((Date.now() - timestamp) < 1*60*1000){
+        //小于一分钟
+        time = '刚刚'
+      }else{
+        time = moment(timestamp).format('YYYY-MM-DD')
+      }
+      result[i].createTime = time
+      resultArr.push(result[i])
+    }
+    res.render('article', { articles: resultArr });
+  });
+}
+
+exports.add = function(req, res, next) {
     res.render('article/add')
 }
 
 exports.list = function(req, res, next) {
-  console.log('==列表===')
     db.collection('articles').find({}).toArray(function(err, result) {
       if (err) throw err;
-      //console.log('-----',result);
-      res.render('article/list', { news_lists: result });
+      var resultArr = []
+      for(var i=0;i<result.length;i++){
+        var obj = {}
+        var timestamp = objectIdToTimestamp(result[i]._id)
+        var time = null
+
+        console.log(Date.now() - timestamp)
+        if((Date.now() - timestamp) < 1*60*60*1000){
+          //小于1小时
+          time = moment(timestamp).startOf('hour').fromNow()
+        }else if((Date.now() - timestamp) < 1*60*1000){
+          //小于一分钟
+          time = '刚刚'
+        }else{
+          time = moment(timestamp).format('YYYY-MM-DD')
+        }
+        result[i].createTime = time
+        resultArr.push(result[i])
+      }
+      res.render('article/list', { news_lists: resultArr });
     });
 }
 
 exports.detail = function(req, res, next) {
     var id = req.query.id
-    var data = {}
-    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, result) {
+    var articlesData = null
+    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, articlesResult) {
       if (err) throw err;
-      console.log('-----','详情',result);
-      data.detail = result
-      //res.render('article/detail', { detail: result });
+      console.log('-----','详情',articlesResult);
+
+      db.collection('comments').find({arId:id}).toArray(function(err, result) {
+        if (err) throw err;
+        var resultArr = []
+        for(var i=0;i<result.length;i++){
+          var obj = {}
+          var timestamp = objectIdToTimestamp(result[i]._id)
+          var time = null
+
+          console.log(Date.now() - timestamp)
+          if((Date.now() - timestamp) < 1*60*1000){
+            //小于一分钟
+            time = '刚刚'
+          }else if((Date.now() - timestamp) < 1*60*60*1000){
+            //小于1小时
+            time = moment(timestamp).startOf('hour').fromNow()
+          }else {
+            time = moment(timestamp).format('YYYY-MM-DD')
+          }
+          result[i].createTime = time
+          resultArr.push(result[i])
+        }
+        //注意 最后返回的结果 是res.send()方法
+        res.render('article/detail',{comments:resultArr,detail:articlesResult})
+      });
 
     });
 
-    db.collection('comments').find({arId:id}).toArray(function(err, result) {
-      if (err) throw err;
 
-      data.comments = result
-      console.log('评论列表',result);
-      //注意 最后返回的结果 是res.send()方法
-      res.render('article/detail',data)
-    });
 
 }
 
@@ -49,13 +135,23 @@ exports.update = function(req, res, next) {
     });
 }
 
-exports.update2 = function(req, res, next) {
+exports.articleUpdate = function(req, res, next) {
 
     // POST 请求在req.body中取值
     //GET 请求在req.params中取值
-    var params = JSON.parse(req.body.params)
-    console.log(params)
-    db.collection('articles').update({_id:mongoose.Types.ObjectId(params.id)},params.params,function(err, result) {
+    var id = req.body.id
+    var title = req.body.title
+    var author = req.body.author
+    var category = req.body.category
+    var content = req.body.content
+    var img = req.body.img
+    db.collection('articles').update({_id:mongoose.Types.ObjectId(id)},{$set:{
+      title:title,
+      author:author,
+      category:category,
+      content:content,
+      img:img,
+    }},function(err, result) {
       if (err) throw err;
       console.log('-----',result);
       //注意 最后返回的结果 是res.send()方法
@@ -63,13 +159,23 @@ exports.update2 = function(req, res, next) {
     });
 }
 
-exports.add = function(req, res, next) {
+exports.create = function(req, res, next) {
 
     // POST 请求在req.body中取值
     //GET 请求在req.params中取值
-    var params = JSON.parse(req.body.params)
+    var title = req.body.title
+    var author = req.body.author
+    var category = req.body.category
+    var content = req.body.content
+    var img = req.body.img
     console.log(params)
-    db.collection('articles').insert(params,function(err, result) {
+    db.collection('articles').insert({
+      title:title,
+      author:author,
+      category:category,
+      content:content,
+      img:img,
+    },function(err, result) {
       if (err) throw err;
       //console.log('-----',result);
       //注意 最后返回的结果 是res.send()方法

@@ -1,62 +1,27 @@
 extends ./../layout
 
 block content
-    div(class="row")
+    div(class="ui  container")
         div(class="add-article")
-        form.form-horizontal
-            fieldset
-            #legend
-              legend 添加文章
-            .control-group
-              // Text input
-              label.control-label(for='input01') 标题
-              .controls
-                input.input-xlarge#title(type='text', placeholder='请输入标题')
-                p.help-block 不能超过20个字
-            .control-group
-              // Text input
-              label.control-label(for='input01') 作者名称
-              .controls
-                input.input-xlarge#author(type='text', placeholder='')
-                p.help-block
-            .control-group
-              label.control-label 文章类型
-              // Multiple Checkboxes
-              .controls#article-type
-                // Inline Checkboxes
-                label.checkbox.inline
-                  input(type='checkbox', value='经济')
-                  |         经济
-                label.checkbox.inline
-                  input(type='checkbox', value='文化')
-                  |         文化
-                label.checkbox.inline
-                  input(type='checkbox', value='军事')
-                  |         军事
-                label.checkbox.inline
-                  input(type='checkbox', value='娱乐')
-                  |         娱乐
-                label.checkbox.inline
-                  input(type='checkbox', value='八卦')
-                  |         八卦
-                label.checkbox.inline
-                  input(type='checkbox', value='IT')
-                  |         IT
-            .control-group
-              // Textarea
-              label.control-label 文章内容
-              .controls
-                .textarea
-                  textarea#content(type='',style="width:500px;height:200px;")
-            .control-group
-              label.control-label 上传缩略图
-              // File Upload
-              .controls
-                input#fileInput.input-file(type='file',name="myfile",multiple)
-                div
-                  img#uploadImg
-            .control-group
-              label.control-label
-              // Button
-              .controls
-                button.btn.btn-success#submit 提交文章
+          form#create-article(class="ui form")
+            div(class="field inline")
+              label 文章分类
+              select#category(class="ui dropdown")
+                option(value="keji") 科技
+                option(value="lvyou") 旅游
+                option(value="wenhua") 文化
+            div(class="field inline")
+              label 文章标题
+              input#title(type='text', placeholder='请输入标题')
+            div(class="field inline")
+              label 作者名称
+              input#author(type='text', placeholder='作者名称')
+            div(class="field inline")
+              label 文章内容
+              textarea#content(type='',style="width:500px;height:200px;")
+            div(class="field inline")
+              label 上传缩略图
+              input#fileInput.input-file(type='file',name="myfile",multiple)
+              div
+                img#uploadImg
+            div(class="ui button submit" type="submit") 确认提交

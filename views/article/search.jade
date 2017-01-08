@@ -1,0 +1,23 @@
+extends ./../layout
+
+block content
+  div(class="ui  container")
+    if (articles.length)
+      for item in articles
+        div(class="ui very relaxed items")
+          div(class="item")
+            div(class="",style="with:120px;margin-right:10px;")
+              if (!item.img)
+                img(src="/assets/images/wireframe/square-image.png",width="50px",alt="")
+              else
+                img(src="#{item.img}",width="50px",alt="")
+            div(class="content")
+              div(class="title")
+                a(class="",href="/article/detail?id=#{item._id}") !{item.title}
+                span(style="float:right;") #{item.createTime}
+              div.description !{item.content.substr(0,80)+'...'}
+    else 
+      div(class="ui icon message")
+        i(class="inbox icon")
+        div(class="content")  
+          p 抱歉没有搜索相关内容。            

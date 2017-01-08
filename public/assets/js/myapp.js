@@ -25,43 +25,28 @@ $(function(){
         }
     }
     xhr.send(oFormData)
-
-    // $.ajax({
-    //         url: '/article/upload',
-    //         data: oFormData,
-    //         processData: false,
-    //         type: 'POST',
-    //         contentType: 'multipart/form-data',
-    //         mimeType: 'multipart/form-data',
-    //         success: function (data) {
-    //             alert(data);
-    //         }
-    //     });
   })
 
   //添加文章
-  $('#submit').on('click',function(){
+  $('#create-article').on('click','.submit',function(){
 
     var title = $('#title').val().trim()
     var author = $('#author').val().trim()
     var $type = $('#article-type')
     var content = $('#content').val().trim()
     var files = $('#fileInput').val()
-    console.log(title)
-    // if(!title || !conetnt){
-    //   return false;
-    // }
-    //
+    var category = $('#category').val()
+
+    if(!category || !title || !content) return ;
 
 
-    $.post('/article/add',{
-      params:JSON.stringify({
-        title:title,
-        author:author,
-        type:3,
-        content:content,
-        img:uploadImgName,
-      })
+    $.post('/api/articleCreate',{
+      category:category,
+      title:title,
+      author:author,
+      type:3,
+      content:content,
+      img:uploadImgName,
     },function(data){
         if(data.rs == 'ok'){
           alert('添加成功！')
@@ -69,49 +54,39 @@ $(function(){
         }
     },'json')
 
-    return false;
-
   })
 
-  $('#update-submit').on('click',function(){
+  $('#update-article').on('click','.submit',function(){
     var id = $(this).data().id
     var title = $('#title').val().trim()
     var author = $('#author').val().trim()
     var $type = $('#article-type')
     var content = $('#content').val().trim()
     var files = $('#fileInput').val()
-    console.log(title)
-    // if(!title || !conetnt){
-    //   return false;
-    // }
-    //
+    var category = $('#category').val()
+    var imgUrl = $('#uploadImg').attr('src')
 
+    if(!title || !content) return ;
 
-    $.post('/article/update2',{
-      params:JSON.stringify({
-        id:id,
-        params:{
-          title:title,
-          author:author,
-          type:3,
-          content:content,
-          img:uploadImgName,
-        }
-      })
+    $.post('/api/articleUpdate',{
+      id:id,
+      category:category,
+      title:title,
+      author:author,
+      type:3,
+      content:content,
+      img:imgUrl,
     },function(data){
         if(data.rs == 'ok'){
           alert('修改成功！')
           location.href="/article/list"
         }
     },'json')
-
-    return false;
-
   })
 
   // 删除新闻列表
   $('#articles-list').on('click','button.del',function(){
-    console.log('--')
+
     var data = $(this).data()
     $.post('/article/remove',{id:data.id},function(result){
       if(result.rs){
@@ -121,11 +96,15 @@ $(function(){
   })
 
   // 添加评论
-  $('#comments-submit').on('click',function(e){
+  $('#submit-comment').on('click',function(){
     var nick = $('#cm-title').val()
     var con = $('#cm-content').val()
     var id=$('#article-id').val()
-    e.preventDefault()
+
+
+
+    if(!nick || !con) return ;
+    $(this).parent().addClass('loading')
     $.post('/comment/add',{
       arId:id,
       nick:nick,
@@ -133,6 +112,7 @@ $(function(){
       createTime:Date.now()
     },function(result){
       if(result.rs){
+        $(this).parent().removeClass('loading')
         setTimeout(function(){
           location.reload()
         },1000)
@@ -141,7 +121,7 @@ $(function(){
   })
 
   //注册
-  $('#reg-box').on('submit',function(){
+  $('#reg-box').on('click','.submit',function(){
     var $regbox = $('#reg-box')
     var username = $regbox.find('.username').val().trim()
     var password = $regbox.find('.password').val().trim()
@@ -163,12 +143,10 @@ $(function(){
         alert(data.error)
       }
     },'json')
-    return false;
-
   })
 
   //登录
-  $('#login-box').on('submit',function(){
+  $('#login-box').on('click','.submit',function(){
     var $regbox = $('#login-box')
     var username = $regbox.find('.username').val().trim()
     var password = $regbox.find('.password').val().trim()
@@ -186,7 +164,32 @@ $(function(){
         alert(data.error)
       }
     },'json')
-    return false;
-
   })
+
+  // 搜索
+  $(document).on('keyup','#search',function(e){
+
+    if(e.which == 13 && $(this).is(':focus')){
+      var keyword = $(this).val().trim()
+      location.href="/article/search?keyword="+keyword
+    }
+  })
+  //select 下拉菜单
+  $('select.dropdown').dropdown();
+  // 添加喜欢
+  $('.cards').on('click','i.heart',function(){
+    var $this = $(this)
+    var id = $this.parents('.card').data().id
+    var likes = $this.next().text()*1+1
+    $.post('/api/likes',{
+      id:id,
+      likes:likes
+    },function(data){
+      if(data.rs){
+        $this.next().text(data.likes)
+      }
+    })
+  })
+
+
 })

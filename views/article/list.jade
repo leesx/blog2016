@@ -1,28 +1,50 @@
 extends ./../layout
 
 block content
-    .container
-    .row
-      table#articles-list.table.table-hover.table-bordered
-        thead
-          tr
-            th 标题
-            th 时间
-            th 查看
-            th 修改
-            th 删除
-        tbody
-          each item in news_lists
-            tr(class="item-id-#{item._id}")
-              td
-                div.media
-                  a(href="/article/update?id=#{item._id}")
-                    div.pull-left.s-img
+  div(class="ui  container")
+    div(class="ui right floated pagination menu")
+      a#submit-comment(class="ui blue labeled submit icon button",href="/article/add")
+        i(class="icon edit")
+        添加文章
+    table(class="ui celled table")
+      colgroup
+        col(width="50%")
+      thead
+        tr
+          th 标题
+          th 时间
+          th 查看
+          th 修改
+          th 删除
+      tbody
+        each item in news_lists
+          tr(class="item")
+            td
+              div(class="ui very relaxed items")
+                div(class="item")
+                  div(class="",style="with:120px;margin-right:10px;")
+                    if (!item.img)
+                      img(src="/assets/images/wireframe/square-image.png",width="50px",alt="")
+                    else
                       img(src="#{item.img}",width="50px",alt="")
-                    div.pull-left
-                      p.media-heading #{item.title}
-              td #{item.time}
-              td: a(href="/article/detail?id=#{item._id}") 查看
-              td: a(href="/article/update?id=#{item._id}") 修改
-              td
-                button.btn.btn-danger.del(type="button", data-id="#{item._id}") 删除
+                  div(class="content")
+                    a(class="",href="/article/detail?id=#{item._id}") #{item.title}
+                    div.description
+            td #{item.createTime}
+            td: a(href="/article/detail?id=#{item._id}") 查看
+            td: a(href="/article/update?id=#{item._id}") 修改
+            td
+              button(class="ui red basic button",type="button", data-id="#{item._id}") 删除
+      tfoot
+        tr
+          th(colspan="5")
+            div(class="ui right floated pagination menu")
+              a(class="icon item")
+                i(class="left chevron icon")
+              a(class="item") 1
+              a(class="item") 2
+              a(class="item") 3
+              a(class="item") 4
+              a(class="item") 5
+              a(class="icon item")
+                i(class="right chevron icon")

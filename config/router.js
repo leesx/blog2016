@@ -17,6 +17,7 @@ module.exports = function(app){
   // })
   // 路由指向 / 不能使用 use
   app.get('/', AppIndex.index);
+  app.post('/api/likes', AppIndex.likes);
 
 
   app.get('/member/index', Members.index);
@@ -29,15 +30,16 @@ module.exports = function(app){
   app.get('/user/login',User.login)
   app.post('/api/login',User.loginApi)
 
-
-  app.get('/article/index', Articles.index);
+  app.get('/article', Articles.index);
+  app.get('/article/search', Articles.search);
+  app.get('/article/add', Articles.add);
   app.get('/article/list', Articles.list);
   app.get('/article/detail', Articles.detail,Comments.list);
-  app.post('/article/add', Articles.add);
+  app.post('/api/articleCreate', Articles.create);
   app.post('/article/upload', Articles.upload);
   app.post('/article/remove', Articles.remove);
   app.get('/article/update', Articles.update);
-  app.post('/article/update2', Articles.update2);
+  app.post('/api/articleUpdate', Articles.articleUpdate);
 
 
   app.get('/comment/index', Comments.index);

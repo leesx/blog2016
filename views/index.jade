@@ -1,14 +1,29 @@
 extends layout
 
 block content
-    div(class="hero-unit")
-        h2 春暖花开，面向大海
-        p 从明天起，做一个幸福的人
-        p 喂马，劈柴，周游世界
-        p 从明天起，关心粮食和蔬菜
-        p 我有一所房子，
-        p 面向大海，春暖花开
-        p: a(href="/article/list" class="btn btn-primary btn-large") 浏览文章
-        p: a(href="/user/login" class="btn btn-primary") 登录
-        p: a(href="/user/reg" class="btn btn-primary") 注册
-            
+    div(class="ui  container")
+      div(class="ui link cards")
+        for item in articles
+          div(class="ui card",data-id="#{item._id}")
+            div(class="content")
+              div(class="right floated meta")
+                if(item.createTime)
+                  | #{item.createTime}
+                else
+                  刚刚
+              img(class="ui avatar image",src="/assets/images/avatar/tom.jpg")
+              span #{item.author ? item.author : '博主'}
+            div(class="image")
+              if(!item.img)
+                img(src="/assets/images/wireframe/square-image.png",alt="")
+              else
+                img(src="#{item.img}",alt="",style="max-height:290px;")
+            div(class="content")
+              a(class="header",href="/article/detail?id=#{item._id}") #{item.title}
+              div(class="description") #{item.content}
+            div(class="extra content")
+              span(class="right floated")
+                i(class="heart outline like icon")
+                span #{item.likes ? item.likes : 0}
+              i(class="comment icon")
+              span #{item.commentLen ? item.commentLen : 0}

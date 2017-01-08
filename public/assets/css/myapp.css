@@ -49,3 +49,11 @@ ul,li{
   margin-bottom: 15px;
   padding: 7px 9px;
 }
+.label-img{
+  margin-right:10px;
+}
+
+.search-tag{
+  color: #f00;
+  text-decoration: underline;
+}
