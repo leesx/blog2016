@@ -9,6 +9,21 @@ moment.locale('zh-CN');
 var formidable = require('formidable');
 var db = require('./../common/db')
 
+var getTimeStr = function(now,timestamp){
+  var time = null
+  if((now - timestamp) < 1*60*1000){
+    //小于一分钟
+    time = '刚刚'
+  }else if((now - timestamp) < 1*60*60*1000){
+    //小于1小时
+    time = moment(timestamp).startOf('hour').fromNow()
+  }else {
+    time = moment(timestamp).format('YYYY-MM-DD')
+  }
+
+  return time
+}
+
 exports.search = function(req, res, next){
   var keyword = req.query.keyword
 
@@ -88,6 +103,8 @@ exports.list = function(req, res, next) {
     });
 }
 
+
+
 exports.detail = function(req, res, next) {
     var id = req.query.id
     var articlesData = null
@@ -103,17 +120,28 @@ exports.detail = function(req, res, next) {
           var timestamp = objectIdToTimestamp(result[i]._id)
           var time = null
 
-          console.log(Date.now() - timestamp)
-          if((Date.now() - timestamp) < 1*60*1000){
-            //小于一分钟
-            time = '刚刚'
-          }else if((Date.now() - timestamp) < 1*60*60*1000){
-            //小于1小时
-            time = moment(timestamp).startOf('hour').fromNow()
-          }else {
-            time = moment(timestamp).format('YYYY-MM-DD')
+          // console.log(Date.now() - timestamp)
+          // if((Date.now() - timestamp) < 1*60*1000){
+          //   //小于一分钟
+          //   time = '刚刚'
+          // }else if((Date.now() - timestamp) < 1*60*60*1000){
+          //   //小于1小时
+          //   time = moment(timestamp).startOf('hour').fromNow()
+          // }else {
+          //   time = moment(timestamp).format('YYYY-MM-DD')
+          // }
+          result[i].createTime = getTimeStr(Date.now(),timestamp)
+          if(result[i].replys && result[i].replys.length){
+            var replysArr = []
+            for(var j=0;j<result[i].replys.length;j++){
+              replysArr.push( {
+                repCont:result[i].replys[j].repCont,
+                repTime:getTimeStr(Date.now(),result[i].replys[j].repTime)
+              })
+            }
+            result[i].replys = replysArr
           }
-          result[i].createTime = time
+
           resultArr.push(result[i])
         }
         //注意 最后返回的结果 是res.send()方法

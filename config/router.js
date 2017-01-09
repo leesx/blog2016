@@ -41,6 +41,8 @@ module.exports = function(app){
   app.get('/article/update', Articles.update);
   app.post('/api/articleUpdate', Articles.articleUpdate);
 
+  app.post('/api/reply', Comments.reply);
+
 
   app.get('/comment/index', Comments.index);
   app.post('/comment/add', Comments.add);

@@ -190,6 +190,23 @@ $(function(){
       }
     })
   })
+  // 回复
+  $('#comments').on('click','.reply-btn',function(){
+    $(this).parent().next().toggle().parents('.comment').siblings().find('.reply-box').hide()
+  }).on('click','.reply-submit',function(){
+    var replyid = $(this).data().replyid
+    var replyCont = $(this).prev().find('textarea').val().trim()
+
+    $.post('/api/reply',{
+      repId:replyid,
+      repCont:replyCont
+    },function(data){
+      if(data.rs){
+        alert('回复成功')
+        location.reload()
+      }
+    })
+  })
 
 
 })

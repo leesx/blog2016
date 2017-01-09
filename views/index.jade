@@ -19,8 +19,8 @@ block content
               else
                 img(src="#{item.img}",alt="",style="max-height:290px;")
             div(class="content")
-              a(class="header",href="/article/detail?id=#{item._id}") #{item.title}
-              div(class="description") #{item.content}
+              a(class="header",href="/article/detail?id=#{item._id}") #{item.title.substr(0,10)+'...'}
+              div(class="description") #{item.content.substr(0,80)+'...'}
             div(class="extra content")
               span(class="right floated")
                 i(class="heart outline like icon")
