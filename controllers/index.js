@@ -7,7 +7,7 @@ moment.locale('zh-CN');
 var db = require('./../common/db')
 
 exports.index = function(req, res, next) {
-  console.log(req.session)
+  console.log('=====session',req.session.isLogin)
   db.collection('articles').find({}).toArray(function(err, result) {
     if (err) throw err;
     var resultArr = []

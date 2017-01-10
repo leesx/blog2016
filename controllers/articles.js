@@ -1,6 +1,7 @@
-var express = require('express');
-var fs = require('fs');
-var mongoose = require('mongoose');
+import express from 'express';
+import fs from 'fs';
+import mongoose from 'mongoose';
+
 var router = express.Router();
 var objectIdToTimestamp = require('objectid-to-timestamp');
 var moment = require('moment');
