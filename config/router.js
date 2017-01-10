@@ -1,12 +1,12 @@
-var AppIndex = require('./../controllers/index');
-var User = require('./../controllers/user');
+import * as AppIndex from  './../controllers/index';
+import * as User from './../controllers/user';
 
 
-var Members = require('./../controllers/members');
-var Articles = require('./../controllers/articles');
-var Comments = require('./../controllers/comments');
+import * as Members from './../controllers/members';
+import * as Articles from './../controllers/articles';
+import * as Comments from './../controllers/comments';
 
-module.exports = function(app){
+export default (app)=>{
   // pre handle user
   // app.use(function(req, res, next) {
   //   // var _user = req.session.user
@@ -47,3 +47,6 @@ module.exports = function(app){
   app.get('/comment/index', Comments.index);
   app.post('/comment/add', Comments.add);
 }
+// module.exports = function(app){
+//
+// }

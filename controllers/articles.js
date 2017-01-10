@@ -1,14 +1,14 @@
-import express from 'express';
 import fs from 'fs';
 import mongoose from 'mongoose';
 
-var router = express.Router();
-var objectIdToTimestamp = require('objectid-to-timestamp');
-var moment = require('moment');
+import objectIdToTimestamp from 'objectid-to-timestamp';
+import moment from 'moment';
 moment.locale('zh-CN');
-//objectIdToTimestamp('563229dd1ee6030100644cbe');// 1446128093391
-var formidable = require('formidable');
-var db = require('./../common/db')
+
+import formidable from 'formidable';
+
+import {db}  from './../common/db'
+
 
 var getTimeStr = function(now,timestamp){
   var time = null
@@ -25,7 +25,7 @@ var getTimeStr = function(now,timestamp){
   return time
 }
 
-exports.search = function(req, res, next){
+export const search = (req, res, next)=>{
   var keyword = req.query.keyword
 
   db.collection('articles').find({$or:[{title:{$regex:keyword}},{content:{$regex:keyword}}]}).toArray(function(err, result) {
@@ -46,7 +46,8 @@ exports.search = function(req, res, next){
       res.render('article/search', { articles: replaceresult });
   })
 }
-exports.index = function(req, res, next) {
+
+export const index = (req, res, next)=>{
   var category = req.query.category
   console.log('============',category)
   db.collection('articles').find({category:category}).toArray(function(err, result) {
@@ -74,12 +75,12 @@ exports.index = function(req, res, next) {
   });
 }
 
-exports.add = function(req, res, next) {
+export const add = (req, res, next)=>{
     res.render('article/add')
 }
 
-exports.list = function(req, res, next) {
-    db.collection('articles').find({}).toArray(function(err, result) {
+export const list = (req, res, next)=> {
+    db.collection('articles').find({}).toArray((err, result)=>{
       if (err) throw err;
       var resultArr = []
       for(var i=0;i<result.length;i++){
@@ -106,14 +107,14 @@ exports.list = function(req, res, next) {
 
 
 
-exports.detail = function(req, res, next) {
+export const detail = (req, res, next)=> {
     var id = req.query.id
     var articlesData = null
-    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, articlesResult) {
+    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},(err, articlesResult)=>{
       if (err) throw err;
       console.log('-----','详情',articlesResult);
 
-      db.collection('comments').find({arId:id}).toArray(function(err, result) {
+      db.collection('comments').find({arId:id}).toArray((err, result)=>{
         if (err) throw err;
         var resultArr = []
         for(var i=0;i<result.length;i++){
@@ -121,16 +122,6 @@ exports.detail = function(req, res, next) {
           var timestamp = objectIdToTimestamp(result[i]._id)
           var time = null
 
-          // console.log(Date.now() - timestamp)
-          // if((Date.now() - timestamp) < 1*60*1000){
-          //   //小于一分钟
-          //   time = '刚刚'
-          // }else if((Date.now() - timestamp) < 1*60*60*1000){
-          //   //小于1小时
-          //   time = moment(timestamp).startOf('hour').fromNow()
-          // }else {
-          //   time = moment(timestamp).format('YYYY-MM-DD')
-          // }
           result[i].createTime = getTimeStr(Date.now(),timestamp)
           if(result[i].replys && result[i].replys.length){
             var replysArr = []
@@ -155,16 +146,16 @@ exports.detail = function(req, res, next) {
 
 }
 
-exports.update = function(req, res, next) {
+export const update = (req, res, next)=>{
     var id = req.query.id
 
-    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},function(err, result) {
+    db.collection('articles').findOne({_id:mongoose.Types.ObjectId(id)},(err, result)=>{
       if (err) throw err;
       res.render('article/update', { detail: result });
     });
 }
 
-exports.articleUpdate = function(req, res, next) {
+export const articleUpdate = (req, res, next)=>{
 
     // POST 请求在req.body中取值
     //GET 请求在req.params中取值
@@ -180,7 +171,7 @@ exports.articleUpdate = function(req, res, next) {
       category:category,
       content:content,
       img:img,
-    }},function(err, result) {
+    }},(err, result)=>{
       if (err) throw err;
       console.log('-----',result);
       //注意 最后返回的结果 是res.send()方法
@@ -188,7 +179,7 @@ exports.articleUpdate = function(req, res, next) {
     });
 }
 
-exports.create = function(req, res, next) {
+export const create = (req, res, next)=>{
 
     // POST 请求在req.body中取值
     //GET 请求在req.params中取值
@@ -204,7 +195,7 @@ exports.create = function(req, res, next) {
       category:category,
       content:content,
       img:img,
-    },function(err, result) {
+    },(err, result)=>{
       if (err) throw err;
       //console.log('-----',result);
       //注意 最后返回的结果 是res.send()方法
@@ -212,11 +203,11 @@ exports.create = function(req, res, next) {
     });
 }
 
-exports.upload = function(req, res, next) {
+export const upload = (req, res, next)=>{
     console.log('上传================',req)
     var form = new formidable.IncomingForm();
 
-    form.parse(req, function (err, fields, files) {
+    form.parse(req,  (err, fields, files)=>{
         console.log('==========',fields, files)
         // 从临时目录读取文件的内容
         var fileContent = fs.readFileSync(files.myfile.path)
@@ -235,10 +226,10 @@ exports.upload = function(req, res, next) {
 
 }
 
-exports.remove = function(req,res,next){
+export const remove = (req,res,next)=>{
   var id = req.body.id
   console.log(req.body.id)
-  db.collection('articles').remove({_id:mongoose.Types.ObjectId(id)},function(err, result) {
+  db.collection('articles').remove({_id:mongoose.Types.ObjectId(id)},(err, result)=>{
     if (err) throw err;
     console.log('-----','删除',result);
     res.send({ rs:'ok' });

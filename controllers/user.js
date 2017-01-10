@@ -1,20 +1,17 @@
-var express = require('express');
-var fs = require('fs');
-var mongoose = require('mongoose');
-var router = express.Router();
-var formidable = require('formidable');
-var sha1 = require('sha1');
-var db = require('./../common/db')
+import mongoose from'mongoose';
+import {db}  from './../common/db'
+import sha1 from 'sha1';
 
-exports.reg = function(req, res, next) {
+
+export const reg = (req, res, next)=>{
   res.render('user/reg')
 }
 
-exports.regApi = function(req, res, next){
+export const regApi = (req, res, next)=>{
 
   var username = req.body.username
   var password = sha1(req.body.password)
-  db.collection('user').findOne({username:username},function(err,result){
+  db.collection('user').findOne({username:username},(err,result)=>{
     if(err) throw err;
     console.log(result,'=====')
     if(result !== null && result._id){
@@ -32,7 +29,7 @@ exports.regApi = function(req, res, next){
     var user = {}
     user.username = username
     req.session.user = user
-    db.collection('user').insert({username:username,password:password},function(err, result) {
+    db.collection('user').insert({username:username,password:password},(err, result)=>{
       if (err) throw err;
       //console.log('-----',result);
       //注意 最后返回的结果 是res.send()方法
@@ -43,15 +40,15 @@ exports.regApi = function(req, res, next){
 }
 
 
-exports.login = function(req, res, next) {
+export const login = (req, res, next)=>{
   res.render('user/login')
 }
 
-exports.loginApi = function(req, res, next){
+export const loginApi = (req, res, next)=>{
 
   var username = req.body.username
   var password = sha1(req.body.password)
-  db.collection('user').findOne({username:username,password:password},function(err,result){
+  db.collection('user').findOne({username:username,password:password},(err,result)=>{
     if(err) throw err;
 
     if(result){

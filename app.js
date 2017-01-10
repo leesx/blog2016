@@ -6,7 +6,7 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
-import sessionConfig from './config/session' ;
+import {sessionConfig} from './config/session' ;
 
 
 const app = express();
@@ -36,7 +36,9 @@ app.use(session({
 // flash 中间价，用来显示通知
 app.use(flash());
 
-require('./config/router')(app)
+import configRouter from './config/router'
+
+configRouter(app)
 
 
 // catch 404 and forward to error handler

@@ -4,22 +4,23 @@
  * Module dependencies.
  */
 //require("babel-core/register");
-var app = require('../app');
-var debug = require('debug')('blog2016:server');
-var http = require('http');
+import app from '../app';
+import debug from 'debug'
+import http from 'http';
 
+const serverDebug = debug('blog2016:server');
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '9000');
+const port = normalizePort(process.env.PORT || '9000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -82,5 +83,5 @@ function onError(error) {
 function onListening() {
     var addr = server.address();
     var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-    debug('Listening on ' + bind);
+    serverDebug('Listening on ' + bind);
 }

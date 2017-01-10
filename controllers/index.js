@@ -4,11 +4,11 @@ var router = express.Router();
 var objectIdToTimestamp = require('objectid-to-timestamp');
 var moment = require('moment');
 moment.locale('zh-CN');
-var db = require('./../common/db')
+import {db}  from './../common/db'
 
-exports.index = function(req, res, next) {
+export const index = (req, res, next)=> {
   console.log('=====session',req.session.isLogin)
-  db.collection('articles').find({}).toArray(function(err, result) {
+  db.collection('articles').find({}).toArray((err, result)=>{
     if (err) throw err;
     var resultArr = []
     var ids =[]
@@ -29,12 +29,7 @@ exports.index = function(req, res, next) {
       }
       result[i].createTime = time
       resultArr.push(result[i])
-      //ids.push(result[i]._id)
-      // db.collection('comments').find({arId:result[i]._id.toString()}).toArray(function(err, commentsResult) {
-      //   if (err) throw err;
-      //   commentsArr.push(commentsResult.length)
-      // });
-      //console.log(commentsArr,'===================')
+
     }
 
     res.render('index', { articles: resultArr });
@@ -42,10 +37,10 @@ exports.index = function(req, res, next) {
 
 }
 
-exports.likes = function(req, res, next) {
+export const likes = (req, res, next)=>{
   var id = req.body.id
   var likes = req.body.likes
-  db.collection('articles').update({_id:mongoose.Types.ObjectId(id)},{$set:{likes:likes}},function(err, result) {
+  db.collection('articles').update({_id:mongoose.Types.ObjectId(id)},{$set:{likes:likes}},(err, result)=>{
     if (err) throw err;
     res.send({rs:true,likes:likes});
   });
