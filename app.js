@@ -1,15 +1,15 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var session = require('express-session');
-var flash = require('connect-flash');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var sessionConfig = require('./config/session');
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import session from 'express-session';
+import flash from 'connect-flash';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import sessionConfig from './config/session' ;
 
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,7 +29,9 @@ app.use(session({
   secret: sessionConfig.secret,// 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
   cookie: {
     maxAge: sessionConfig.maxAge// 过期时间，过期后 cookie 中的 session id 自动删除
-  }
+  },
+  resave:false,
+  saveUninitialized:false
 }));
 // flash 中间价，用来显示通知
 app.use(flash());
@@ -38,7 +40,7 @@ require('./config/router')(app)
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next)=>{
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -49,7 +51,7 @@ app.use(function(req, res, next) {
 // 开发环境 development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use((err, req, res, next)=>{
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -60,7 +62,7 @@ if (app.get('env') === 'development') {
 
 // 生产环境 production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next)=>{
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

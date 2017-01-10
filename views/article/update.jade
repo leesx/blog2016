@@ -7,9 +7,9 @@ block content
           div(class="field inline")
             label 文章分类
             select#category(class="ui dropdown")
-              option(value="keji") 科技
-              option(value="lvyou") 旅游
-              option(value="wenhua") 文化
+              option(value="keji",selected="#{detail.category=='keji'}") 科技
+              option(value="lvyou",selected="#{detail.category=='lvyou'}") 旅游
+              option(value="wenhua",selected="#{detail.category=='wenhua'}") 文化
           div(class="field  inline")
             label 文章标题
             input#title(type='text', placeholder='请输入标题',value='#{detail.title}')

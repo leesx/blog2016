@@ -33,3 +33,18 @@ exports.list = function(req, res, next) {
     res.render('article/detail',{comments:result})
   });
 }
+
+exports.reply = function(req,res,next){
+  var id = req.body.repId
+  var repCont = req.body.repCont
+  db.collection('comments').update(
+    {
+      _id:mongoose.Types.ObjectId(id)
+    },
+    {
+      $push:{replys:{repCont:repCont,repTime:Date.now()}}
+    },function(err,result){
+    if(err) throw err;
+    res.send({rs:true,msg:'回复成功'})
+  })
+}

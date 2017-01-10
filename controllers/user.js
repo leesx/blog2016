@@ -53,9 +53,11 @@ exports.loginApi = function(req, res, next){
   var password = sha1(req.body.password)
   db.collection('user').findOne({username:username,password:password},function(err,result){
     if(err) throw err;
-    console.log(result,'=====')
+
     if(result){
+      req.session.isLogin = 1;
       res.send({rs:1})
+
     }
   })
 

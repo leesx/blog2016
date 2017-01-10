@@ -13,7 +13,7 @@ block content
             p #{detail.content}
           input#article-id(type='hidden',value='#{detail._id}')
 
-        div(class="ui comments")
+        div#comments(class="ui comments")
           h3(class="ui dividing header") 评论
           each item,index in comments
             div(class="comment")
@@ -29,17 +29,35 @@ block content
                         --  
                   div(class="text") #{item.content}
                   div(class="actions")
-                    a(class="reply") 回复
-                  div(class="reply-box")
+                    a(class="reply reply-btn") 回复
+                  div(class="reply-box",style="display:none;")
                     form(class="ui reply form")
                       div(class="field")
-                        textarea(rows="2",style="height:auto;")
-                      div(class="ui reply-btn  button",type="submit") 发表   
+                        textarea(rows="2",placeholder="请输入回复内容",style="height:auto;")
+                      div(class="ui reply-submit  button",type="submit",data-replyid="#{item._id}") 发表  
+            if(item.replys && item.replys.length)
+              div(class="comments",style="margin-top:10px;")
+                for replyItem in item.replys
+                  div(class="comment")
+                      a(class="avatar")
+                        img(src="/assets/images/avatar/tom.jpg")
+                      div(class="content")
+                        a(class="author") #{replyItem.nick}
+                        div(class="metadata")
+                          span(class="date")
+                            if(replyItem.repTime)
+                              | #{replyItem.repTime}
+                            else
+                              --  
+                        div(class="text") #{replyItem.repCont}
+                
+
+                   
           form(class="ui reply form")
             div(class="field")
               input.input-xlarge#cm-title(type='text', placeholder='请输入昵称')
             div(class="field")
-              textarea#cm-content
+              textarea#cm-content(placeholder="请输入留言内容")
             div#submit-comment(class="ui blue labeled submit icon button",type="submit")
               i(class="icon edit")
               提交评论
