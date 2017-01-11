@@ -26,4 +26,4 @@ block content
                 i(class="heart outline like icon")
                 span #{item.likes ? item.likes : 0}
               i(class="comment icon")
-              span #{item.commentLen ? item.commentLen : 0}
+              a(href="/article/detail?id=#{item._id}#comments") #{item.comments_num ? item.comments_num : 0}

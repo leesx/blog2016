@@ -9,6 +9,7 @@
     "start": "cross-env BABEL_ENV=production NODE_ENV=development nodemon ./bin/www"
   },
   "dependencies": {
+    "async": "^2.1.4",
     "babel-core": "^6.21.0",
     "babel-preset-stage-0": "^6.16.0",
     "babel-preset-stage-2": "^6.18.0",
