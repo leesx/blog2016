@@ -6,7 +6,9 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import configRouter from './config/router'
 import {sessionConfig} from './config/session' ;
+const MongoStore = require('connect-mongo')(session);
 
 
 const app = express();
@@ -19,7 +21,7 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -31,12 +33,22 @@ app.use(session({
     maxAge: sessionConfig.maxAge// 过期时间，过期后 cookie 中的 session id 自动删除
   },
   resave:false,
-  saveUninitialized:false
+  saveUninitialized:true,
+  store: new MongoStore({// 将 session 存储到 mongodb
+    url: 'mongodb://127.0.0.1:27017/blog'// mongodb 地址
+  })
 }));
+// use this middleware to reset cookie expiration time
+// when user hit page every time
+app.use(function(req, res, next){
+  req.session._garbage = Date();
+  req.session.touch();
+  next();
+});
 // flash 中间价，用来显示通知
 app.use(flash());
 
-import configRouter from './config/router'
+
 
 configRouter(app)
 

@@ -20,13 +20,13 @@ export const search = (req, res, next)=>{
         item.content = reContent
       })
 
-      res.render('article/search', { articles: result });
+      res.render('article/search', { articles: result,isLogin:req.session.isLogin });
   })
 }
 
 export const index = (req, res, next)=>{
   const category = req.query.category
-
+  console.log('session',req.session)
   db.collection('articles')
     .find({category:category})
     .toArray((err, result)=>{
@@ -37,7 +37,7 @@ export const index = (req, res, next)=>{
       item.createTime = getFormatTime(timestamp)
       resultArr.push(item)
     })
-    res.render('article', { articles: resultArr });
+    res.render('article', { articles: resultArr ,isLogin:req.session.isLogin});
   });
 }
 
@@ -93,7 +93,7 @@ export const detail = (req, res, next)=> {
         })
 
         //注意 最后返回的结果 是res.send()方法
-        res.render('article/detail',{comments:resultArr,detail:articlesResult})
+        res.render('article/detail',{comments:resultArr,detail:articlesResult,isLogin:req.session.isLogin})
       });
 
     });
@@ -108,7 +108,7 @@ export const update = (req, res, next)=>{
     db.collection('articles')
       .findOne({_id: ObjectID(id)},(err, result)=>{
       if (err) throw err;
-      res.render('article/update', { detail: result });
+      res.render('article/update', { detail: result,isLogin:req.session.isLogin });
     });
 }
 

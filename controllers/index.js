@@ -29,7 +29,8 @@ export const index = (req, res, next)=> {
     const {one,two} = result
 
     const finalResult =  one.map((item,index)=>Object.assign(item,two[index]))
-    res.render('index', { articles: finalResult });
+
+    res.render('index', { articles: finalResult ,isLogin:req.session.isLogin ? 1 : 0});
 
   })
 }

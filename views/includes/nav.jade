@@ -4,14 +4,16 @@ div(class="ui  top  menu")
     a(class="item active",href="/") 首页
     a(class="item",href="/article?category=lvyou") 旅游
     a(class="item",href="/article?category=wenhua") 文化
-    a(class="item",href="/article/list") 文章管理
-    a(class="item",href="/member/index") 会员管理
-    a(class="item",href="/comment/index") 评论管理
+    if(isLogin)
+      a(class="item",href="/article/list") 文章管理
+      a(class="item",href="/member/index") 会员管理
+      a(class="item",href="/comment/index") 评论管理
     div(class="right menu")
-      div(class="item")
-        a(class="ui button", href="/user/login") 登录 #{isLogin}
-      div(class="item")
-        a(class="ui primary button",href="/user/reg") 注册 #{user}
+      if(!isLogin)
+        div(class="item")
+          a(class="ui button", href="/user/login") 登录   
+        div(class="item")
+          a(class="ui primary button",href="/user/reg") 注册
       div(class="item")
         div(class="ui category search")
           div(class="ui icon input")

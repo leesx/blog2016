@@ -1,8 +1,6 @@
-import mongoose from'mongoose';
-console.log(mongoose)
-import { ObjectID } from 'mongodb';
-import {db}  from './../common/db'
+import { db, ObjectID }  from './../common/db'
 import sha1 from 'sha1';
+import async from 'async';
 
 
 export const reg = (req, res, next)=>{
@@ -14,10 +12,17 @@ export const regApi = (req, res, next)=>{
   const username = req.body.username
   const password = sha1(req.body.password)
 
-db.collection('user')
-  .findOne({username:username},(err,result)=>{
-    if(err) throw err;
-    if(result !== null && result._id){
+  //串行前后有关联
+  async.waterfall([
+    function(callback){
+      db.collection('user')
+        .findOne({username:username},(err,result)=>{
+          if(err) throw err;
+          callback(null,result)
+        })
+    }
+  ],function(error,finalResult){
+    if(finalResult !== null && finalResult._id){
       res.send({
         rs:0,
         error:'用户名已经占用',
@@ -46,9 +51,9 @@ export const login = (req, res, next)=>{
 }
 
 export const loginApi = (req, res, next)=>{
-
   const username = req.body.username
   const password = sha1(req.body.password)
+
   db.collection('user')
     .findOne({username:username,password:password},(err,result)=>{
       if(err) throw err;
