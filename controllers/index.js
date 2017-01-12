@@ -30,7 +30,7 @@ export const index = (req, res, next)=> {
 
     const finalResult =  one.map((item,index)=>Object.assign(item,two[index]))
 
-    res.render('index', { articles: finalResult ,isLogin:req.session.isLogin ? 1 : 0});
+    res.render('index', { articles: finalResult});
 
   })
 }

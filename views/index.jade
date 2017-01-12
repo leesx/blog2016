@@ -2,8 +2,6 @@ extends layout
 
 block content
     div(class="ui  container")
-      div
-        p 欢迎光临 #{isLogin ? '主人' : ''}
       div(class="ui link cards")
         for item in articles
           div(class="ui card",data-id="#{item._id}")

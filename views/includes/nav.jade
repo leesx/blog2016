@@ -9,11 +9,15 @@ div(class="ui  top  menu")
       a(class="item",href="/member/index") 会员管理
       a(class="item",href="/comment/index") 评论管理
     div(class="right menu")
+      p 欢迎光临 #{isLogin ? username : '游客'}
       if(!isLogin)
         div(class="item")
           a(class="ui button", href="/user/login") 登录   
         div(class="item")
           a(class="ui primary button",href="/user/reg") 注册
+      else
+        div(class="item")
+          a(class="ui primary button",href="/user/loginout") 退出    
       div(class="item")
         div(class="ui category search")
           div(class="ui icon input")

@@ -20,13 +20,13 @@ export const search = (req, res, next)=>{
         item.content = reContent
       })
 
-      res.render('article/search', { articles: result,isLogin:req.session.isLogin });
+      res.render('article/search', { articles: result });
   })
 }
 
 export const index = (req, res, next)=>{
   const category = req.query.category
-  console.log('session',req.session)
+
   db.collection('articles')
     .find({category:category})
     .toArray((err, result)=>{
@@ -37,7 +37,7 @@ export const index = (req, res, next)=>{
       item.createTime = getFormatTime(timestamp)
       resultArr.push(item)
     })
-    res.render('article', { articles: resultArr ,isLogin:req.session.isLogin});
+    res.render('article', { articles: resultArr });
   });
 }
 
@@ -93,7 +93,7 @@ export const detail = (req, res, next)=> {
         })
 
         //注意 最后返回的结果 是res.send()方法
-        res.render('article/detail',{comments:resultArr,detail:articlesResult,isLogin:req.session.isLogin})
+        res.render('article/detail',{comments:resultArr,detail:articlesResult})
       });
 
     });

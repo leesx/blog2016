@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // session 中间件
 app.use(session({
   name: sessionConfig.key,// 设置 cookie 中保存 session id 的字段名称
@@ -32,25 +33,28 @@ app.use(session({
   cookie: {
     maxAge: sessionConfig.maxAge// 过期时间，过期后 cookie 中的 session id 自动删除
   },
-  resave:false,
+  resave:true,
   saveUninitialized:true,
   store: new MongoStore({// 将 session 存储到 mongodb
     url: 'mongodb://127.0.0.1:27017/blog'// mongodb 地址
   })
 }));
-// use this middleware to reset cookie expiration time
-// when user hit page every time
-app.use(function(req, res, next){
-  req.session._garbage = Date();
-  req.session.touch();
-  next();
-});
+
 // flash 中间价，用来显示通知
 app.use(flash());
 
 
+// 添加模板必需的三个变量
+app.use(function (req, res, next) {
+  res.locals.isLogin = req.session.isLogin;
+  res.locals.username = req.session.username;
+  res.locals.success = req.flash('success').toString();
+  res.locals.error = req.flash('error').toString();
+  next();
+});
 
 configRouter(app)
+
 
 
 // catch 404 and forward to error handler

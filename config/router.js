@@ -15,7 +15,7 @@ export default (app)=>{
   //
   //   next()
   // })
-  // 路由指向 / 不能使用 use
+
   app.get('/', AppIndex.index);
   app.post('/api/likes', AppIndex.likes);
 
@@ -29,6 +29,7 @@ export default (app)=>{
   //登录
   app.get('/user/login',User.login)
   app.post('/api/login',User.loginApi)
+  app.get('/user/loginout',User.loginout)
 
   app.get('/article', Articles.index);
   app.get('/article/search', Articles.search);

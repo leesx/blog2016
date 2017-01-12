@@ -60,8 +60,16 @@ export const loginApi = (req, res, next)=>{
 
       if(result){
         req.session.isLogin = 1;
+        req.session.username = username;
         res.send({rs:1})
       }
     })
+}
 
+export const loginout = (req,res,next)=>{
+  if(req.session.isLogin){
+    req.session.isLogin = null
+    req.session.username = null
+    res.redirect('/')
+  }
 }
