@@ -207,6 +207,7 @@ $(function(){
       }
     })
   })
-
+  //window.UEDITOR_HOME_URL = '/'
+  //var ue = UE.getEditor('container');
 
 })

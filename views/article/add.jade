@@ -19,9 +19,11 @@ block content
             div(class="field inline")
               label 文章内容
               textarea#content(type='',style="width:500px;height:200px;")
+              //script(id="container" name="content" type="text/plain")
             div(class="field inline")
               label 上传缩略图
               input#fileInput.input-file(type='file',name="myfile",multiple)
               div
                 img#uploadImg
             div(class="ui button submit" type="submit") 确认提交
+          
